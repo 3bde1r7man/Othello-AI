@@ -66,12 +66,12 @@ def getMove(Board, x, y, player):
 
 
 
-def getAllMoves(Board):
+def getAllMoves(Board, player):
     moves = []
     for i in range(8):
         for j in range(8):
             if Board[i][j] == 0:
-                moves.append(getMove(Board, i, j, 1))
+                moves.append(getMove(Board, i, j, player))
     return moves
 
 
@@ -135,7 +135,7 @@ def testGetAllMoves():
     for i in range(8):
         print(Board[i])
     print()
-    moves = getAllMoves(Board)
+    moves = getAllMoves(Board, 1)
     for move in moves:
         for i in range(8):
             print(move[i])
