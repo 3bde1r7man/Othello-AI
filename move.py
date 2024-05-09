@@ -3,55 +3,51 @@ import copy
 
 def flipUp(Board, x, y, player):
     count = 0
-    newBoard = copy.deepcopy(Board)
     for i in range(x - 1, 0, -1):
-        if newBoard[i][y] == player:
+        if Board[i][y] == player:
             if(count == (x - 1) - i ):
                 for j in range(i, x):
-                    newBoard[j][y] = player
+                    Board[j][y] = player
                 break
-        elif newBoard[i][y] != 0 and newBoard[i][y] != player:
+        elif Board[i][y] != 0 and Board[i][y] != player:
             count += 1
-    return newBoard
+    return Board
 
 def flipDown(Board, x, y, player):
     count = 0
-    newBoard = copy.deepcopy(Board)
     for i in range(x + 1, 7):
-        if newBoard[i][y] == player:
+        if Board[i][y] == player:
             if(count == i - (x + 1)):
                 for j in range(x, i):
-                    newBoard[j][y] = player
+                    Board[j][y] = player
                 break
-        elif newBoard[i][y] != 0 and newBoard[i][y] != player:
+        elif Board[i][y] != 0 and Board[i][y] != player:
             count += 1
-    return newBoard
+    return Board
 
 def flipLeft(Board, x, y, player):
     count = 0
-    newBoard = copy.deepcopy(Board)
     for i in range(y - 1, 0, -1):
-        if newBoard[x][i] == player:
+        if Board[x][i] == player:
             if(count == (y - 1) - i):
                 for j in range(i, y):
-                    newBoard[x][j] = player
+                    Board[x][j] = player
                 break
-        elif newBoard[x][i] != 0 and newBoard[x][i] != player:
+        elif Board[x][i] != 0 and Board[x][i] != player:
             count += 1
-    return newBoard
+    return Board
 
 def flipRight(Board, x, y, player):
     count = 0
-    newBoard = copy.deepcopy(Board)
     for i in range(y + 1, 7):
-        if newBoard[x][i] == player:
+        if Board[x][i] == player:
             if(count == i - (y + 1)):
                 for j in range(y, i):
-                    newBoard[x][j] = player
+                    Board[x][j] = player
                 break
-        elif newBoard[x][i] != 0 and newBoard[x][i] != player:
+        elif Board[x][i] != 0 and Board[x][i] != player:
             count += 1
-    return newBoard
+    return Board
 
 
 def getMove(Board, x, y, player):
