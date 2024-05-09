@@ -1,6 +1,26 @@
 
 import copy
 
+# check if the move is in bounds of the board
+def inBounds(x, y):
+    if x >= 0 and x <= 7 and y >= 0 and y <= 7:
+        return True
+    return False
+
+# check if the move is valid for the player and adjacent to the opponent
+def validMove(Board, x, y, player):
+    if inBounds(x, y) and Board[x][y] == 0:
+        if x - 1 >= 0 and Board[x - 1][y] != 0 and Board[x - 1][y] != player: # check up
+            return True
+        if x + 1 <= 7 and Board[x + 1][y] != 0 and Board[x + 1][y] != player: # check down
+            return True
+        if y - 1 >= 0 and Board[x][y - 1] != 0 and Board[x][y - 1] != player: # check left
+            return True
+        if y + 1 <= 7 and Board[x][y + 1] != 0 and Board[x][y + 1] != player: # check right
+            return True
+    return False
+
+# flip the opponent's pieces
 def flipUp(Board, x, y, player):
     count = 0
     for i in range(x - 1, 0, -1):
@@ -49,10 +69,10 @@ def flipRight(Board, x, y, player):
             count += 1
     return Board
 
-
+# get the new board after the move
 def getMove(Board, x, y, player):
     newBoard = copy.deepcopy(Board)
-    if newBoard[x][y] == 0:
+    if validMove(newBoard, x, y, player):
         newBoard[x][y] = player
         newBoard = flipUp(newBoard, x, y, player)
         newBoard = flipDown(newBoard, x, y, player)
@@ -61,12 +81,12 @@ def getMove(Board, x, y, player):
     return newBoard
 
 
-
+# get all possible moves for the player
 def getAllMoves(Board, player):
     moves = []
     for i in range(8):
         for j in range(8):
-            if Board[i][j] == 0:
+            if validMove(Board, i, j, player):
                 moves.append(getMove(Board, i, j, player))
     return moves
 
