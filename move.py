@@ -9,7 +9,7 @@ def inBounds(x, y):
 
 # check if the move is valid for the player and adjacent to the opponent
 def validMove(Board, x, y, player):
-    if inBounds(x, y) and Board[x][y] == 0:
+    if inBounds(x, y) and Board[x][y] == 0 and (checkFlipDown(Board, x, y, player) or checkFlipUp(Board, x, y, player) or checkFlipLeft(Board, x, y, player) or checkFlipRight(Board, x, y, player)):
         if x - 1 >= 0 and Board[x - 1][y] != 0 and Board[x - 1][y] != player: # check up
             return True
         if x + 1 <= 7 and Board[x + 1][y] != 0 and Board[x + 1][y] != player: # check down
@@ -20,12 +20,56 @@ def validMove(Board, x, y, player):
             return True
     return False
 
+def checkFlipUp(Board, x, y, player):
+    count = 0
+    for i in range(x - 1, 0, -1):
+        if Board[i][y] == player:
+            if(count == (x - 1) - i):
+                return True
+            return False
+        elif Board[i][y] != 0 and Board[i][y] != player:
+            count += 1
+    return False
+
+def checkFlipDown(Board, x, y, player):
+    count = 0
+    for i in range(x + 1, 7):
+        if Board[i][y] == player:
+            if(count == i - (x + 1)):
+                return True
+            return False
+        elif Board[i][y] != 0 and Board[i][y] != player:
+            count += 1
+    return False
+
+def checkFlipLeft(Board, x, y, player):
+    count = 0
+    for i in range(y - 1, 0, -1):
+        if Board[x][i] == player:
+            if(count == (y - 1) - i):
+                return True
+            return False
+        elif Board[x][i] != 0 and Board[x][i] != player:
+            count += 1
+    return False
+
+def checkFlipRight(Board, x, y, player):
+    count = 0
+    for i in range(y + 1, 7):
+        if Board[x][i] == player:
+            if(count == i - (y + 1)):
+                return True
+            return False
+        elif Board[x][i] != 0 and Board[x][i] != player:
+            count += 1
+    return False
+
 # flip the opponent's pieces
 def flipUp(Board, x, y, player):
     count = 0
     for i in range(x - 1, 0, -1):
         if Board[i][y] == player:
-            if(count == (x - 1) - i ):
+            if(count == (x - 1) - i):
                 for j in range(i, x):
                     Board[j][y] = player
                 break
@@ -151,7 +195,7 @@ def testGetAllMoves():
     for i in range(8):
         print(Board[i])
     print()
-    moves = getAllMoves(Board, 1)
+    moves = getAllMoves(Board, 2)
     for move in moves:
         for i in range(8):
             print(move[i])
