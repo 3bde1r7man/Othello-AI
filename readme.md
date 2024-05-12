@@ -1,6 +1,3 @@
-Here's a `README.md` file that explains the design of your Othello game project, providing your developers with a clear overview of the structure and how to work with it:
-
-```markdown
 # Othello Game Project
 
 ## Overview
