@@ -13,13 +13,11 @@ class BoardWindow:
         self.blackScore_label = None
         self.whiteScore_label = None
         self.level = 0
-        self.color = 0
 
 
-    def boardWindow(self,button_id, radioValue, window):
+    def boardWindow(self,button_id, window):
         global image1_board, image2_board, whiteImage, blackImage
         self.level = button_id
-        self.color = radioValue
 
 
         self.board_window = tk.Toplevel(window)

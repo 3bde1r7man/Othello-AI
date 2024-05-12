@@ -16,11 +16,6 @@ class GUI_Helper:
                 elif board[i][j] == 0:
                     buttons[i][j].config(text="", bg="#009067")
         print("GUI should update now")
-        for i in range(8):
-            for j in range(8):
-                if not (Helper.validMove(self.board.grid, i, j, 1)):
-                    self.buttons[i][j].config(state=tk.DISABLED)
-
 
 
 
