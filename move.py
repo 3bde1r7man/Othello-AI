@@ -201,9 +201,140 @@ def testGetAllMoves():
             print(move[i])
         print()
 
+
+infinity = 1000000000
+def utility_fun(Board):
+    black_count = 0
+    white_count = 0
+    for i in range(len(Board)):
+        for j in range(len(Board[0])):
+            if Board[i][j] == 1: #black
+                black_count += 1
+            elif Board[i][j] == 2: #white
+                white_count += 1
+
+    return black_count - white_count
+
+def are_2d_lists_equal(list1, list2):
+    # Check if the lists have the same dimensions
+    if len(list1) != len(list2) or len(list1[0]) != len(list2[0]):
+        return False
+    
+    # Iterate through each element and compare
+    for i in range(len(list1)):
+        for j in range(len(list1[0])):
+            if list1[i][j] != list2[i][j]:
+                return False
+    
+    # If all elements are equal, return True
+    return True
+
+# Max is always set to represent the black player.
+# initial values for:
+# - move: the current board state,
+# - levels: the depth of the search,
+# - is_max: indicates whether it's the maximizing player's turn (True for black, False for white),
+# - alpha: the best value found so far for the maximizing player its initial value is negative infinity,
+# - beta: the best value found so far for the minimizing player its initial value is infinity,
+# - originalBoard: always equals the initial board state before any moves,
+# - oldAlphaOrBeta: the value of the best found alpha or beta, depending on the type of player (black or white),
+# - bestMove: initially equals the current board state; if there is a valid move, it will represent the best move found.
+
+# Max we will make it always to be for the black player 
+# initial values for:
+    # move is Board, levels are depth of search, alpha is negative infinity, beta ,
+    # originalBoard always equals the initial Board before any moves,
+    # oldAlphaOrBeta is the value of best found alpha or beta depends on the type of player black or white,
+    # bestMove is initialy equals board then if there is a valid moves it will equal the best move of them.  
+def AlphaBeta(move, levels, is_max, alpha, beta, originalBoard, oldAlphaOrBeta, bestMove):
+    player = 2
+    if is_max:
+        player =1    
+    moves = getAllMoves(move, player)
+    if levels == 0 or len(moves) == 0:
+        return utility_fun(move)
+
+    if is_max: 
+        maxValue = -infinity
+        for childMove in moves:
+            value = AlphaBeta(childMove, levels - 1, False, alpha, beta, originalBoard, oldAlphaOrBeta, bestMove)
+            maxValue = max(maxValue, value)
+            alpha = max(alpha, value)
+            if beta <= alpha:
+                break
+    
+            if are_2d_lists_equal(move, originalBoard):
+                if oldAlphaOrBeta == -infinity:
+                    bestMove.clear()
+                    bestMove.extend(childMove)
+                    oldAlphaOrBeta = alpha
+                    
+                elif alpha > oldAlphaOrBeta:
+                    bestMove.clear()
+                    bestMove.extend(childMove)
+                    oldAlphaOrBeta = alpha
+                    
+        return maxValue
+    else:
+        minValue = infinity
+        for childMove in moves:
+            value = AlphaBeta(childMove, levels - 1, True, alpha, beta, originalBoard, oldAlphaOrBeta, bestMove)
+            minValue = min(minValue, value)
+            beta = min(beta, value)
+            if beta <= alpha:
+                break
+            
+            if are_2d_lists_equal(move, originalBoard):
+                if oldAlphaOrBeta == infinity:
+                    bestMove.clear()
+                    bestMove.extend(childMove)
+                    oldAlphaOrBeta = beta
+                    
+                elif beta < oldAlphaOrBeta:
+                    bestMove.clear()
+                    bestMove.extend(childMove)
+                    oldAlphaOrBeta = beta
+                    
+        return minValue
+
+def testAlphaBeta():
+    Board = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 1, 2, 0, 0, 0],
+        [0, 0, 0, 2, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+    for i in range(8):
+        print(Board[i])
+    print()
+    bestMove =copy.deepcopy(Board)
+    
+    AlphaBeta(Board, 3, False, -infinity, infinity, Board, infinity, bestMove )
+    print("when depth is 3, best move for white player is ")
+    for i in range(8):
+        print(bestMove[i])
+    print()
+    
+    AlphaBeta(Board, 3, True, -infinity, infinity, Board, -infinity, bestMove )
+    print("when depth is 3, best move for black player is ")
+    for i in range(8):
+        print(bestMove[i])
+    print()
+
+    AlphaBeta(Board, 5, True, -infinity, infinity, Board, -infinity, bestMove )
+    print("when depth is 5, best move for black player is ")
+    for i in range(8):
+        print(bestMove[i])
+    print()
+
 def main():
     # testGetMove()
-    testGetAllMoves()
+    #testGetAllMoves()
+    testAlphaBeta()
 
 if __name__ == '__main__':
     main()
