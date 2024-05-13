@@ -17,7 +17,12 @@ class BoardWindow:
 
     def boardWindow(self,button_id, window):
         global image1_board, image2_board, whiteImage, blackImage
-        self.level = button_id
+        if(button_id == 1):
+            self.level = 1
+        elif(button_id == 2):
+            self.level = 3
+        elif(button_id == 3):
+            self.level = 5
 
 
         self.board_window = tk.Toplevel(window)
