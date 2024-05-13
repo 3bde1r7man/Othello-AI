@@ -13,111 +13,64 @@ class Helper:
     # check if the move is valid for the player and adjacent to the opponent
     @staticmethod
     def validMove(Board, x, y, player):
-        if Helper.inBounds(x, y) and Board[x][y] == 0 and (Helper.checkFlipDown(Board, x, y, player) or Helper.checkFlipUp(Board, x, y, player) or Helper.checkFlipLeft(Board, x, y, player) or Helper.checkFlipRight(Board, x, y, player)):
-            if x - 1 >= 0 and Board[x - 1][y] != 0 and Board[x - 1][y] != player: # check up
+        if Helper.inBounds(x, y) and Board[x][y] == 0 and (Helper.checkFlipCol(Board, x, y, player, x - 1, -1, -1) or Helper.checkFlipCol(Board, x, y, player, x + 1, 8, 1) or Helper.checkFlipRow(Board, x, y, player, y - 1, -1, -1) or Helper.checkFlipRow(Board, x, y, player, y + 1, 8, 1)):
+            if x - 1 >= 0 and Board[x - 1][y] != 0 and Board[x - 1][y] != player:
                 return True
-            if x + 1 <= 7 and Board[x + 1][y] != 0 and Board[x + 1][y] != player: # check down
+            if x + 1 <= 7 and Board[x + 1][y] != 0 and Board[x + 1][y] != player:
                 return True
-            if y - 1 >= 0 and Board[x][y - 1] != 0 and Board[x][y - 1] != player: # check left
+            if y - 1 >= 0 and Board[x][y - 1] != 0 and Board[x][y - 1] != player:
                 return True
-            if y + 1 <= 7 and Board[x][y + 1] != 0 and Board[x][y + 1] != player: # check right
+            if y + 1 <= 7 and Board[x][y + 1] != 0 and Board[x][y + 1] != player:
                 return True
         return False
-
+    
     @staticmethod
-    def checkFlipUp(Board, x, y, player):
+    def checkFlipRow(Board, x, y, player, i, j, inc):
         count = 0
-        for i in range(x - 1, -1, -1):
-            if Board[i][y] == player:
-                if(count == (x - 1) - i and count != 0):
+        for k in range(i, j, inc):
+            if Board[x][k] == player:
+                if(count == abs(k - i) and count != 0):
                     return True
                 return False
-            elif Board[i][y] != 0 and Board[i][y] != player:
+            elif Board[x][k] != 0 and Board[x][k] != player:
                 count += 1
         return False
+    
     @staticmethod
-    def checkFlipDown(Board, x, y, player):
+    def checkFlipCol(Board, x, y, player, i, j, inc):
         count = 0
-        for i in range(x + 1, 8):
-            if Board[i][y] == player:
-                if(count == i - (x + 1) and count != 0):
+        for k in range(i, j, inc):
+            if Board[k][y] == player:
+                if(count == abs(k - i) and count != 0):
                     return True
                 return False
-            elif Board[i][y] != 0 and Board[i][y] != player:
+            elif Board[k][y] != 0 and Board[k][y] != player:
                 count += 1
         return False
+    
     @staticmethod
-    def checkFlipLeft(Board, x, y, player):
+    def flipCol(Board, x, y, player, i, j, inc):
         count = 0
-        for i in range(y - 1, -1, -1):
-            if Board[x][i] == player:
-                if(count == (y - 1) - i and count != 0):
-                    return True
-                return False
-            elif Board[x][i] != 0 and Board[x][i] != player:
-                count += 1
-        return False
-    @staticmethod
-    def checkFlipRight(Board, x, y, player):
-        count = 0
-        for i in range(y + 1, 8):
-            if Board[x][i] == player:
-                if(count == i - (y + 1) and count != 0):
-                    return True
-                return False
-            elif Board[x][i] != 0 and Board[x][i] != player:
-                count += 1
-        return False
-
-    # flip the opponent's pieces
-    @staticmethod
-    def flipUp(Board, x, y, player):
-        count = 0
-        for i in range(x - 1, -1, -1):
-            if Board[i][y] == player:
-                if(count == (x - 1) - i and count != 0):
-                    for j in range(i, x):
-                        Board[j][y] = player
+        for k in range(i, j, inc):
+            if Board[k][y] == player:
+                if(count == abs(k - i) and count != 0):
+                    for l in range(i, k, inc):
+                        Board[l][y] = player
                     break
-            elif Board[i][y] != 0 and Board[i][y] != player:
+            elif Board[k][y] != 0 and Board[k][y] != player:
                 count += 1
         return Board
     
     @staticmethod
-    def flipDown(Board, x, y, player):
+    def flipRow(Board, x, y, player, i, j, inc):
         count = 0
-        for i in range(x + 1, 8):
-            if Board[i][y] == player:
-                if(count == i - (x + 1) and count != 0):
-                    for j in range(x, i):
-                        Board[j][y] = player
+        for k in range(i, j, inc):
+            if Board[x][k] == player:
+                if(count == abs(k - i) and count != 0):
+                    for l in range(i, k, inc):
+                        Board[x][l] = player
                     break
-            elif Board[i][y] != 0 and Board[i][y] != player:
-                count += 1
-        return Board
-    @staticmethod
-    def flipLeft(Board, x, y, player):
-        count = 0
-        for i in range(y - 1, -1, -1):
-            if Board[x][i] == player:
-                if(count == (y - 1) - i and count != 0):
-                    for j in range(i, y):
-                        Board[x][j] = player
-                    break
-            elif Board[x][i] != 0 and Board[x][i] != player:
-                count += 1
-        return Board
-
-    @staticmethod
-    def flipRight(Board, x, y, player):
-        count = 0
-        for i in range(y + 1, 8):
-            if Board[x][i] == player:
-                if(count == i - (y + 1) and count != 0):
-                    for j in range(y, i):
-                        Board[x][j] = player
-                    break
-            elif Board[x][i] != 0 and Board[x][i] != player:
+            elif Board[x][k] != 0 and Board[x][k] != player:
                 count += 1
         return Board
 
@@ -127,10 +80,10 @@ class Helper:
         newBoard = copy.deepcopy(Board)
         if Helper.validMove(newBoard, x, y, player):
             newBoard[x][y] = player
-            newBoard = Helper.flipUp(newBoard, x, y, player)
-            newBoard = Helper.flipDown(newBoard, x, y, player)
-            newBoard = Helper.flipLeft(newBoard, x, y, player)
-            newBoard = Helper.flipRight(newBoard, x, y, player)
+            newBoard = Helper.flipCol(newBoard, x, y, player, x - 1, -1, -1) # flip up
+            newBoard = Helper.flipCol(newBoard, x, y, player, x + 1, 8, 1) # flip down
+            newBoard = Helper.flipRow(newBoard, x, y, player, y - 1, -1, -1) # flip left
+            newBoard = Helper.flipRow(newBoard, x, y, player, y + 1, 8, 1) # flip right
         return newBoard
 
 
@@ -196,8 +149,8 @@ class Helper:
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 1, 2, 0, 0, 0],
                 [0, 0, 0, 2, 1, 0, 0, 0],
+                [0, 0, 0, 1, 2, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0]
@@ -205,7 +158,7 @@ class Helper:
         for i in range(8):
             print(Board[i])
         print()
-        moves = Helper.getAllMoves(Board, 2)
+        moves = Helper.getAllMoves(Board, 1)
         for move in moves:
             for i in range(8):
                 print(move[i])
@@ -311,7 +264,7 @@ class Helper:
 
 
 def main():
-    Helper.testGetMove()
+    #Helper.testGetMove()
     Helper.testGetAllMoves()
 
 if __name__ == '__main__':
