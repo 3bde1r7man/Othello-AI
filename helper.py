@@ -164,6 +164,17 @@ class Helper:
                 print(move[i])
             print()
 
+
+    @staticmethod
+    def check_winner(Board):
+        res = Helper.utility_fun(Board)
+        if res > 0:
+            return "Black is winner!"
+        elif res < 0:
+            return "White is winner!"
+        else:
+            return "Draw!"
+
     @staticmethod
     def utility_fun(Board):
         black_count = 0
@@ -269,3 +280,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
