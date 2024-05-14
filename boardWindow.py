@@ -17,45 +17,6 @@ class BoardWindow:
         self.result = ""
 
 
-
-    def resultWindow(self, window):
-        global image1_result, image2_result
-
-        self.result_window = tk.Toplevel(window)
-        self.result_window.title("Othello Game")
-        board_window_width = 1000
-        board_window_height = 500
-        GUI_Helper.center_window(self.result_window, board_window_width, board_window_height)
-
-        top_border = tk.Frame(self.result_window, bg="#009067", height=15)
-        top_border.pack(fill="x", side="top")
-        down_border = tk.Frame(self.result_window, bg="#009067", height=15)
-        down_border.pack(fill="x", side="bottom")
-
-        frame1_board = tk.Frame(self.result_window, bg="white", width=board_window_width)
-        frame1_board.pack(fill="x")
-        frame2_board = tk.Frame(self.result_window, bg="white", width=board_window_width)
-        frame2_board.pack(fill="x",expand=True)
-
-        image1_result = tk.PhotoImage(file="Images/logo.png").subsample(7)
-        image2_result = tk.PhotoImage(file="Images/image1.png").subsample(2)
-        label_image1_board = tk.Label(frame1_board, image=image1_result, bg="white")
-        label_image1_board.pack(side="left", padx=(10, 0), pady=(20, 1))
-        label_image2_board = tk.Label(frame1_board, image=image2_result, bg="white")
-        label_image2_board.pack(side="left", padx=(0, 1), pady=(20, 1))
-
-
-        label_result = tk.Label(frame2_board, text=f"{self.result}", bg = "white", fg="black", font=("Arial",50,"bold"))
-        label_result.pack(padx=50, pady=(90,180))
-
-
-        self.result_window.grid_rowconfigure(0, weight=1)
-        self.result_window.grid_rowconfigure(1, weight=2)
-        frame1_board.grid_columnconfigure(0, weight=1)
-        frame2_board.grid_columnconfigure(0, weight=1)
-
-
-
     def boardWindow(self,button_id, window):
         global image1_board, image2_board, whiteImage, blackImage
         if(button_id == 1):
@@ -140,9 +101,9 @@ class BoardWindow:
             self.board.grid = Helper.getMove(self.board.grid, x, y, 1)
             self.updateGUI()
             
-            self.board_window.after(500, self.trigger_computer_move(window))  # Delay computer move by 1000ms
+            self.board_window.after(500, self.trigger_computer_move)  # Delay computer move by 1000ms
 
-    def trigger_computer_move(self,window):
+    def trigger_computer_move(self):
         print("Computer's turn.")
         resultBoard = copy.deepcopy(self.board.grid)
         Helper.AlphaBeta(self.board.grid, self.level, False, Helper.negative_infinity, Helper.infinity, self.board.grid, Helper.infinity, resultBoard)
@@ -151,16 +112,14 @@ class BoardWindow:
             self.gameTerminate += 1
             if self.gameTerminate == 2:
                 self.result = Helper.check_winner(self.board.grid)
-                self.resultWindow(window)
-                print(self.result)
-                self.board_window.destroy()
+                self.display_winner(self.result)
                 return
 
         self.board.grid = resultBoard
         self.updateGUI()
         list = Helper.getAllMoves(self.board.grid, 1)
         if (len(list) == 0):
-            self.trigger_computer_move(window)
+            self.trigger_computer_move()
         print("Computer has made a move.")
         self.gameTerminate = 0
 
@@ -182,3 +141,11 @@ class BoardWindow:
         self.whiteScore_label.config(text=f"{whiteScore}")
         print("GUI updated.")
 
+
+    def display_winner(self, winner):
+        for row in self.buttons:
+            for button in row:
+                button.config(state=tk.DISABLED)
+        winner_label = tk.Label(self.board_window, text=winner, fg="black", font=("Arial", 32))
+        winner_label.pack(pady=20)
+        print(winner)
