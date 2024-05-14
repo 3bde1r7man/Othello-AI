@@ -140,7 +140,7 @@ class BoardWindow:
             self.board.grid = Helper.getMove(self.board.grid, x, y, 1)
             self.updateGUI()
             
-            self.board_window.after(500, self.trigger_computer_move(window))  # Delay computer move by 1000ms
+            self.board_window.after(500, self.trigger_computer_move, window)  # Delay computer move by 1000ms
 
     def trigger_computer_move(self,window):
         print("Computer's turn.")
