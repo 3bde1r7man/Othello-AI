@@ -13,6 +13,47 @@ class BoardWindow:
         self.blackScore_label = None
         self.whiteScore_label = None
         self.level = 0
+        self.gameTerminate = 0
+        self.result = ""
+
+
+
+    def resultWindow(self, window):
+        global image1_result, image2_result
+
+        self.result_window = tk.Toplevel(window)
+        self.result_window.title("Othello Game")
+        board_window_width = 1000
+        board_window_height = 500
+        GUI_Helper.center_window(self.result_window, board_window_width, board_window_height)
+
+        top_border = tk.Frame(self.result_window, bg="#009067", height=15)
+        top_border.pack(fill="x", side="top")
+        down_border = tk.Frame(self.result_window, bg="#009067", height=15)
+        down_border.pack(fill="x", side="bottom")
+
+        frame1_board = tk.Frame(self.result_window, bg="white", width=board_window_width)
+        frame1_board.pack(fill="x")
+        frame2_board = tk.Frame(self.result_window, bg="white", width=board_window_width)
+        frame2_board.pack(fill="x",expand=True)
+
+        image1_result = tk.PhotoImage(file="Images/logo.png").subsample(7)
+        image2_result = tk.PhotoImage(file="Images/image1.png").subsample(2)
+        label_image1_board = tk.Label(frame1_board, image=image1_result, bg="white")
+        label_image1_board.pack(side="left", padx=(10, 0), pady=(20, 1))
+        label_image2_board = tk.Label(frame1_board, image=image2_result, bg="white")
+        label_image2_board.pack(side="left", padx=(0, 1), pady=(20, 1))
+
+
+        label_result = tk.Label(frame2_board, text=f"{self.result}", bg = "white", fg="black", font=("Arial",50,"bold"))
+        label_result.pack(padx=50, pady=(90,180))
+
+
+        self.result_window.grid_rowconfigure(0, weight=1)
+        self.result_window.grid_rowconfigure(1, weight=2)
+        frame1_board.grid_columnconfigure(0, weight=1)
+        frame2_board.grid_columnconfigure(0, weight=1)
+
 
 
     def boardWindow(self,button_id, window):
@@ -72,7 +113,7 @@ class BoardWindow:
         for i in range(8):
             for j in range(8):
                 button = tk.Button(canvas, bg="#009067", width=8, height=4,
-                                   command=lambda x=i, y=j: self.button_click(x, y))
+                                   command=lambda x=i, y=j: self.button_click(x, y, window))
                 button.grid(row=i, column=j)
                 self.buttons[i][j] = button
         self.updateGUI()
@@ -82,28 +123,46 @@ class BoardWindow:
         frame1_board.grid_columnconfigure(0, weight=1)
         frame2_board.grid_columnconfigure(0, weight=1)
 
-    def button_click(self, x, y):
+    def button_click(self, x, y, window):
         if Helper.getAllMoves(self.board.grid, 1) == []:  # Check if player has valid moves
             print("Player has no valid moves.")
+            self.gameTerminate += 1
+            if self.gameTerminate == 2:
+                self.result = Helper.check_winner(self.board.grid)
+                self.resultWindow(window)
+                print(self.result)
+                self.board_window.destroy()
+                return
+
         if Helper.validMove(self.board.grid, x, y, 1):
+            self.gameTerminate = 0
             print(f"Player move at ({x}, {y})")
             self.board.grid = Helper.getMove(self.board.grid, x, y, 1)
             self.updateGUI()
             
-            self.board_window.after(500, self.trigger_computer_move)  # Delay computer move by 1000ms
+            self.board_window.after(500, self.trigger_computer_move(window))  # Delay computer move by 1000ms
 
-    def trigger_computer_move(self):
+    def trigger_computer_move(self,window):
         print("Computer's turn.")
         resultBoard = copy.deepcopy(self.board.grid)
         Helper.AlphaBeta(self.board.grid, self.level, False, Helper.negative_infinity, Helper.infinity, self.board.grid, Helper.infinity, resultBoard)
         if resultBoard == self.board.grid:
             print("Computer has no valid moves.")
+            self.gameTerminate += 1
+            if self.gameTerminate == 2:
+                self.result = Helper.check_winner(self.board.grid)
+                self.resultWindow(window)
+                print(self.result)
+                self.board_window.destroy()
+                return
+
         self.board.grid = resultBoard
         self.updateGUI()
         list = Helper.getAllMoves(self.board.grid, 1)
         if (len(list) == 0):
-            self.trigger_computer_move()
+            self.trigger_computer_move(window)
         print("Computer has made a move.")
+        self.gameTerminate = 0
 
     def updateGUI(self):
         blackScore = whiteScore = 0  # Reset scores before recount
@@ -122,3 +181,4 @@ class BoardWindow:
         self.blackScore_label.config(text=f"{blackScore}")
         self.whiteScore_label.config(text=f"{whiteScore}")
         print("GUI updated.")
+
