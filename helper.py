@@ -98,74 +98,6 @@ class Helper:
         return moves
 
     @staticmethod
-    def testGetMove():
-        Board = [
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 1, 2, 0, 0, 0],
-                [0, 0, 0, 2, 1, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0]
-                ]
-        for i in range(8):
-            print(Board[i])
-        print()
-        newBoard = Helper.getMove(Board, 2, 3, 1)
-        print("X = 2, Y = 3, Player = 1")
-        for i in range(8):
-            print(newBoard[i])
-        print()
-        print("X = 2, Y = 4, Player = 1")
-        newBoard = Helper.getMove(Board, 2, 4, 1)
-        for i in range(8):
-            print(newBoard[i])
-        print()
-        print("X = 3, Y = 2, Player = 1")
-        newBoard = Helper.getMove(Board, 3, 2, 1)
-        for i in range(8):
-            print(newBoard[i])
-        print()
-        print("X = 3, Y = 5, Player = 1")
-        newBoard = Helper.getMove(Board, 3, 5, 1)
-        for i in range(8):
-            print(newBoard[i])
-        print()
-        print("X = 4, Y = 2, Player = 1")
-        newBoard = Helper.getMove(Board, 4, 2, 1)
-        for i in range(8):
-            print(newBoard[i])
-        print()
-        print("X = 4, Y = 5, Player = 1")
-        newBoard = Helper.getMove(Board, 4, 5, 1)
-        for i in range(8):
-            print(newBoard[i])
-        print()
-
-    @staticmethod
-    def testGetAllMoves():
-        Board = [
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 2, 1, 0, 0, 0],
-                [0, 0, 0, 1, 2, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0]
-                ]
-        for i in range(8):
-            print(Board[i])
-        print()
-        moves = Helper.getAllMoves(Board, 1)
-        for move in moves:
-            for i in range(8):
-                print(move[i])
-            print()
-
-
-    @staticmethod
     def check_winner(Board):
         res = Helper.utility_fun(Board)
         if res > 0:
@@ -271,13 +203,4 @@ class Helper:
                         oldAlphaOrBeta = beta
                         
             return minValue
-
-
-
-def main():
-    #Helper.testGetMove()
-    Helper.testGetAllMoves()
-
-if __name__ == '__main__':
-    main()
 
