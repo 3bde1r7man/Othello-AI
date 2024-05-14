@@ -124,15 +124,6 @@ class BoardWindow:
         frame2_board.grid_columnconfigure(0, weight=1)
 
     def button_click(self, x, y, window):
-        if Helper.getAllMoves(self.board.grid, 1) == []:  # Check if player has valid moves
-            print("Player has no valid moves.")
-            self.gameTerminate += 1
-            if self.gameTerminate == 2:
-                self.result = Helper.check_winner(self.board.grid)
-                self.resultWindow(window)
-                print(self.result)
-                self.board_window.destroy()
-                return
 
         if Helper.validMove(self.board.grid, x, y, 1):
             self.gameTerminate = 0
@@ -160,6 +151,7 @@ class BoardWindow:
         self.updateGUI()
         list = Helper.getAllMoves(self.board.grid, 1)
         if (len(list) == 0):
+            print("Player has no valid moves.")
             self.trigger_computer_move(window)
         print("Computer has made a move.")
         self.gameTerminate = 0
