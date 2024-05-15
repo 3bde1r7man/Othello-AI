@@ -122,9 +122,14 @@ class BoardWindow:
         self.board_window.grid_rowconfigure(1, weight=2)
         frame1_board.grid_columnconfigure(0, weight=1)
         frame2_board.grid_columnconfigure(0, weight=1)
-
+    
     def button_click(self, x, y, window):
-
+        if self.board.black == 0 or self.board.white == 0:
+                self.result = Helper.check_winner(self.board.grid)
+                self.resultWindow(window)
+                print(self.result)
+                self.board_window.destroy()
+                return
         if Helper.validMove(self.board.grid, x, y, 1):
             self.gameTerminate = 0
             print(f"Player move at ({x}, {y})")
@@ -135,15 +140,16 @@ class BoardWindow:
             self.board_window.after(500, self.trigger_computer_move, window)  # Delay computer move by 1000ms
 
     def trigger_computer_move(self,window):
-        print("Computer's turn.")
-        resultBoard = copy.deepcopy(self.board.grid)
-        Helper.AlphaBeta(self.board.grid, self.level, False, Helper.negative_infinity, Helper.infinity, self.board.grid, Helper.infinity, resultBoard)
         if self.board.black == 0 or self.board.white == 0:
                 self.result = Helper.check_winner(self.board.grid)
                 self.resultWindow(window)
                 print(self.result)
                 self.board_window.destroy()
                 return
+        
+        print("Computer's turn.")
+        resultBoard = copy.deepcopy(self.board.grid)
+        Helper.AlphaBeta(self.board.grid, self.level, False, Helper.negative_infinity, Helper.infinity, self.board.grid, Helper.infinity, resultBoard)
         
         if resultBoard == self.board.grid:
             print("Computer has no valid moves.")
