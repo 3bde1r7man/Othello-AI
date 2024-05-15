@@ -154,20 +154,20 @@ class BoardWindow:
                 print(self.result)
                 self.board_window.destroy()
                 return
-
-        self.board.grid = resultBoard
-        self.board.white -= 1
-        self.updateGUI()
-        list = Helper.getAllMoves(self.board.grid, 1)
-        print("Remaining of black is ")
-        print(self.board.black)
-        print("Remaining of white is ")
-        print(self.board.white)
-        if (len(list) == 0):
-            print("Player has no valid moves.")
-            self.trigger_computer_move(window)
-        print("Computer has made a move.")
-        self.gameTerminate = 0
+        else:
+            self.board.grid = resultBoard
+            self.board.white -= 1
+            self.updateGUI()
+            list = Helper.getAllMoves(self.board.grid, 1)
+            print("Remaining of black is ")
+            print(self.board.black)
+            print("Remaining of white is ")
+            print(self.board.white)
+            if (len(list) == 0):
+                print("Player has no valid moves.")
+                self.trigger_computer_move(window)
+            print("Computer has made a move.")
+            self.gameTerminate = 0
 
     def updateGUI(self):
         blackScore = whiteScore = 0  # Reset scores before recount
