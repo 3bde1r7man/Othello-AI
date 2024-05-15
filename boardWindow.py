@@ -138,10 +138,17 @@ class BoardWindow:
         print("Computer's turn.")
         resultBoard = copy.deepcopy(self.board.grid)
         Helper.AlphaBeta(self.board.grid, self.level, False, Helper.negative_infinity, Helper.infinity, self.board.grid, Helper.infinity, resultBoard)
+        if self.board.black == 0 or self.board.white == 0:
+                self.result = Helper.check_winner(self.board.grid)
+                self.resultWindow(window)
+                print(self.result)
+                self.board_window.destroy()
+                return
+        
         if resultBoard == self.board.grid:
             print("Computer has no valid moves.")
             self.gameTerminate += 1
-            if self.gameTerminate == 2 or self.board.black == 0 or self.board.white == 0:
+            if self.gameTerminate == 2:
                 self.result = Helper.check_winner(self.board.grid)
                 self.resultWindow(window)
                 print(self.result)
@@ -152,6 +159,10 @@ class BoardWindow:
         self.board.white -= 1
         self.updateGUI()
         list = Helper.getAllMoves(self.board.grid, 1)
+        print("Remaining of black is ")
+        print(self.board.black)
+        print("Remaining of white is ")
+        print(self.board.white)
         if (len(list) == 0):
             print("Player has no valid moves.")
             self.trigger_computer_move(window)
