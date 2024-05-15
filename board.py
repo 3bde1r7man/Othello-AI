@@ -1,6 +1,8 @@
 class Board:
     def __init__(self):
         self.grid = [[0 for _ in range(8)] for _ in range(8)]
+        self.black = 30
+        self.white = 30
         self.initialize_board()
 
     def initialize_board(self):

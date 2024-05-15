@@ -128,6 +128,7 @@ class BoardWindow:
         if Helper.validMove(self.board.grid, x, y, 1):
             self.gameTerminate = 0
             print(f"Player move at ({x}, {y})")
+            self.board.black -= 1
             self.board.grid = Helper.getMove(self.board.grid, x, y, 1)
             self.updateGUI()
             
@@ -140,7 +141,7 @@ class BoardWindow:
         if resultBoard == self.board.grid:
             print("Computer has no valid moves.")
             self.gameTerminate += 1
-            if self.gameTerminate == 2:
+            if self.gameTerminate == 2 or self.board.black == 0 or self.board.white == 0:
                 self.result = Helper.check_winner(self.board.grid)
                 self.resultWindow(window)
                 print(self.result)
@@ -148,6 +149,7 @@ class BoardWindow:
                 return
 
         self.board.grid = resultBoard
+        self.board.white -= 1
         self.updateGUI()
         list = Helper.getAllMoves(self.board.grid, 1)
         if (len(list) == 0):
