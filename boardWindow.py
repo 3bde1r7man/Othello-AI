@@ -159,6 +159,7 @@ class BoardWindow:
             self.board.white -= 1
             self.updateGUI()
             self.gameTerminate = 0
+            print("Computer has made a move.")
         list = Helper.getAllMoves(self.board.grid, 1)
         print("Remaining of black is ")
         print(self.board.black)
@@ -167,7 +168,6 @@ class BoardWindow:
         if (len(list) == 0):
             print("Player has no valid moves.")
             self.trigger_computer_move(window)
-            print("Computer has made a move.")
 
     def updateGUI(self):
         blackScore = whiteScore = 0  # Reset scores before recount
