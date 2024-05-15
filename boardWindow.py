@@ -124,12 +124,6 @@ class BoardWindow:
         frame2_board.grid_columnconfigure(0, weight=1)
     
     def button_click(self, x, y, window):
-        if self.board.black == 0 or self.board.white == 0:
-                self.result = Helper.check_winner(self.board.grid)
-                self.resultWindow(window)
-                print(self.result)
-                self.board_window.destroy()
-                return
         if Helper.validMove(self.board.grid, x, y, 1):
             self.gameTerminate = 0
             print(f"Player move at ({x}, {y})")
